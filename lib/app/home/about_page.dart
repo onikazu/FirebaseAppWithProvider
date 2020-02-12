@@ -1,4 +1,8 @@
+import 'package:firebase_app_with_provider/common_widgets/avatar.dart';
+import 'package:firebase_app_with_provider/models/avatar_reference.dart';
+import 'package:firebase_app_with_provider/services/firestore_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AboutPage extends StatelessWidget {
   @override
@@ -33,7 +37,18 @@ class AboutPage extends StatelessWidget {
   }
 
   Widget _buildUserInfo({BuildContext context}) {
-    // TODO: implement
-    
+    final database = Provider.of<FirestoreService>(context);
+    return StreamBuilder<AvatarReference>(
+      stream: database.avatarReferenceStream(),
+      builder: (context, snapshot){
+        final avatarReference = snapshot.data;
+        return Avatar(
+          photoUrl: avatarReference?.downloadUrl,
+          radius: 50,
+          borderColor: Colors.black54,
+          borderWidth: 2.0,
+        );
+      },
+    );
   }
 }

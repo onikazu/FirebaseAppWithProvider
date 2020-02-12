@@ -6,13 +6,16 @@ import 'package:firebase_app_with_provider/services/firestore_path.dart';
 import 'package:flutter/cupertino.dart';
 
 class FirestoreService {
-  Future<void> setAvatarReference({@required String uid, @required AvatarReference avatarReference}) async {
+  FirestoreService({@required this.uid}): assert(uid != null);
+  final String uid;
+
+  Future<void> setAvatarReference(AvatarReference avatarReference) async {
     final path = FirestorePath.avatar(uid);
     final reference = Firestore.instance.document(path);
     await reference.setData(avatarReference.toMap());
   }
 
-  Stream<AvatarReference> avatarReferenceStream({@required String uid}){
+  Stream<AvatarReference> avatarReferenceStream(){
     final path = FirestorePath.avatar(uid);
     final reference = Firestore.instance.document(path);
     final snapshots = reference.snapshots();
